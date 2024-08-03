@@ -38,4 +38,38 @@ check status
 ncs --status | grep status
 ```
 
-##### EACH TIME YOU WANT TO RUN, YOU WILL HAVE TO LOAD ENVIRONMENT VARIABLES ( source ~/nso-6.0/ncsrc)
+> EACH TIME YOU WANT TO RUN, YOU WILL HAVE TO LOAD ENVIRONMENT VARIABLES ( source ~/nso-6.0/ncsrc)
+
+##### Access Cisco NSO
+
+```
+ncs_cli -C -u admin
+#(no password required)
+```
+
+Also reachable on http://localhost:8080
+
+##### Connect to network devices
+
+```
+FROM terminal 
+
+ncs_cli -C -u admin
+
+-> Add authentication group
+devices authgroups group CDGROUP
+    default-map remote-name admin
+    default-map remote-password admin
+    default-map remote-secondary-password admin123 (enable password!)
+
+-> Add a device
+devices device R1
+    address 10.10.10.1
+    authgroup CDGROUP
+    ssh host-key-verification none
+    device-type cli ned-id cisco-ios-cli-3.8
+    device-type cli protocol ssh
+    state admin-state unlocked
+    commit
+    connect
+    end
